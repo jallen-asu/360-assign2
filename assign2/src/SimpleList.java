@@ -1,12 +1,12 @@
 //       Name: Jack Allen
 //         ID: 1212661409
 //	 Class ID: 163
-// Assignment: Assignment 1
+// Assignment: Assignment 2
 //    Lecture: M 3:05 PM, Online
 
 import java.util.Arrays;
 
-//Simple list class.  Build onto an integer array ("list") of size 10.  "count" is used to maintain the working size of the list, as to not print unused
+//Simple list class.  Build onto an integer array ("list") of dynamic size.  "count" is used to maintain the working size of the list, as to not print unused
 //elements of the list.  Methods are used for adding, removing, printing, and sizing the list.  Only constructor is a default.
 //
 public class SimpleList
