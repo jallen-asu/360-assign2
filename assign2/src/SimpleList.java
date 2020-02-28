@@ -4,29 +4,44 @@
 // Assignment: Assignment 1
 //    Lecture: M 3:05 PM, Online
 
+import java.util.Arrays;
+
 //Simple list class.  Build onto an integer array ("list") of size 10.  "count" is used to maintain the working size of the list, as to not print unused
 //elements of the list.  Methods are used for adding, removing, printing, and sizing the list.  Only constructor is a default.
 //
 public class SimpleList
 {
-    private int[] list;
-    private int count;
+    private int[] list, tempList;
+    private int count, currentSize;
 
     //constructor initializes the variables
     public SimpleList()
     {
         count = 0;
+        currentSize = 10;
         list = new int[10];
-        //heap allocated
     }
 
-    //adds an integer to the front (index 0) of the list.  moves all elements to the right, dropping the 10th element if present
+    //adds an integer to the front (index 0) of the list.  moves all elements to the right
+    //if list is full, size of list is increased by 50%
     public void add(int input)
     {
-        if(count < 10)
+        if(count == currentSize)                    //if list is full
         {
-            count++;
+            currentSize = (int)(currentSize * 1.5);
+
+            tempList = new int[count];
+            tempList = Arrays.copyOf(list, count);
+
+            list = new int[currentSize];
+
+            for(int i = 0; i < count; i++)
+            {
+                list[i] = tempList[i];
+            }
         }
+
+        count++;
 
         for(int i = count-1; i > 0; i--)
         {
@@ -35,8 +50,33 @@ public class SimpleList
 
         list[0] = input;
     }
+    
+    //appends the input integer to the end of the list
+    //if list is full, size of list is increased by 50%
+    public void append(int input)
+    {
+    	if(count == currentSize)                    //if list is full
+        {
+            currentSize = (int)(currentSize * 1.5);
 
-    //removes all occurrences of an integer from the list.  decrements count each time
+            tempList = new int[count];
+            tempList = Arrays.copyOf(list, count);
+
+            list = new int[currentSize];
+
+            for(int i = 0; i < count; i++)
+            {
+                list[i] = tempList[i];
+            }
+        }
+    	
+    	list[count] = input;
+    	
+    	count++;
+    }
+
+    //removes all occurrences of an integer from the list.  decrements count each time.
+    //if list gets more than 25% empty, size is decreased by 25%
     public void remove(int input)
     {
         int index = search(input);
@@ -51,6 +91,22 @@ public class SimpleList
             }
 
             index = search(input);
+        }
+        
+        //more than 25% empty
+        if( ((float)(currentSize - count) / (float)(currentSize)) > 0.25f && currentSize > 1)
+        {
+            currentSize = (int)(currentSize * .75);
+
+            tempList = new int[count];
+            tempList = Arrays.copyOf(list, count);
+            
+            list = new int[currentSize];
+
+            for(int i = 0; i < count; i++)
+            {
+                list[i] = tempList[i];
+            }
         }
     }
 
@@ -77,7 +133,7 @@ public class SimpleList
         return returnString;
     }
 
-    //finds the first occurrence of an integer in the list and returns that index.  iterative search
+    //finds the first occurrence of an integer in the list and returns that index.  linear search
     public int search(int input)
     {
         for(int i = 0; i < count; i++)
@@ -89,5 +145,45 @@ public class SimpleList
         }
 
         return -1;
+    }
+    
+    //gets value of first entry in list.  returns -1 if list is empty
+    public int first()
+    {
+    	int returnVal;
+    	
+    	if(count > 0)
+    	{
+    		returnVal = list[0];
+    	}
+    	else
+    	{
+    		returnVal = -1;
+    	}
+    	
+    	return returnVal;
+    }
+    
+    //gets value of last entry in list.  returns -1 if list is empty
+    public int last()
+    {
+    	int returnVal;
+    	
+    	if(count > 0)
+    	{
+    		returnVal = list[count - 1];
+    	}
+    	else
+    	{
+    		returnVal = -1;
+    	}
+    	
+    	return returnVal;
+    }
+    
+    //returns current capacity of list
+    public int size()
+    {
+    	return currentSize;
     }
 }
